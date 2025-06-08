@@ -12,7 +12,8 @@
 	"postCreateCommand": "/bin/sh ./.devcontainer/setup.sh",
 	"remoteUser": "vscode",
 	"mounts": [
-		"target=${containerWorkspaceFolder}/.pnpm-store,type=volume"
+		"target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
+		"target=${containerWorkspaceFolder}/node_modules,type=volume"
 	],
 	"customizations": {
 		"vscode": {
