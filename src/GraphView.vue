@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import Highcharts, { SeriesOptionsType } from "highcharts";
 import { fetchIdolRankingLog, fetchRankingLog, splitRanges } from "@/matsurihime/rankingLog";
 import { event, idolId, rankRange, rankingType } from "./main";
@@ -7,6 +7,7 @@ import { rankingType2Name } from "./matsurihime";
 import { highchartsOptions } from "./highchartsOptions";
 
 const chartRef = ref<HTMLElement | null>(null);
+const chart = ref<Highcharts.Chart | null>(null);
 
 onMounted(async () => {
   if (chartRef.value) {
@@ -36,7 +37,7 @@ onMounted(async () => {
         data: v.data.map(d => { return { "x": d.aggregatedAt.getTime(), "y": d.score } }),
       }
     });
-    Highcharts.chart(chartRef.value, {
+    chart.value = Highcharts.chart(chartRef.value, {
       ...highchartsOptions,
       xAxis: {
         type: "datetime",
@@ -55,6 +56,12 @@ onMounted(async () => {
       },
       series: series,
     });
+  }
+});
+onUnmounted(() => {
+  if (chart.value) {
+    chart.value.destroy();
+    chart.value = null;
   }
 });
 </script>

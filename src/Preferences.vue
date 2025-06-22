@@ -2,10 +2,36 @@
 import { mltdEvents, event, rankingType, idols, idolId, rankRange } from './main';
 import { fetchBorders, MltdEventBorders } from './matsurihime/borders';
 import { computedAsync } from '@vueuse/core';
+import router from './router';
 
 const eventBorers = computedAsync<MltdEventBorders>(async () => event.value ? await fetchBorders(event.value.id) : {});
 const rankingTypes = computedAsync<string[]>(async () => eventBorers.value ? Object.keys(eventBorers.value) : []);
 const idolIds = computedAsync<number[]>(async () => eventBorers.value?.idolPoint?.map(border => border.idolId) || []);
+
+function validateRankRange(value: string): boolean {
+    const regex = /^\d+(-\d+)?(,\d+(-\d+)?)*$/;
+    return regex.test(value);
+}
+
+function sendForm(): void {
+    if (!event.value) {
+        alert("イベントを選択してください");
+        return;
+    }
+    if (!rankingType.value) {
+        alert("ランキング種別を選択してください");
+        return;
+    }
+    if (rankingType.value === 'idolPoint' && !idolId.value) {
+        alert("アイドルを選択してください");
+        return;
+    }
+    if (!rankRange.value || !validateRankRange(rankRange.value)) {
+        alert("順位の範囲を正しく入力してください（例: 1-10,1000,2500）");
+        return;
+    }
+    router.push('/graphview')
+}
 
 </script>
 
@@ -43,10 +69,10 @@ const idolIds = computedAsync<number[]>(async () => eventBorers.value?.idolPoint
         </v-container>
         <v-container>
             <label for="rank">順位</label>
-            <input type="text" name="rank" v-model="rankRange" placeholder="1-10,20,30">
+            <input type="text" name="rank" v-model="rankRange">
         </v-container>
         <v-container>
-            <v-btn color="primary" @click="$router.push('/graphview')">
+            <v-btn color="primary" @click="sendForm">
                 OK
             </v-btn></v-container>
     </main>

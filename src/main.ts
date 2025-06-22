@@ -22,7 +22,7 @@ export const idols = mltdIdols();
 export const event = ref<MltdEvent | null>(null);
 export const rankingType = ref<MltdRankingType | null>("eventPoint");
 export const idolId = ref<number | null>(null);
-export const rankRange = ref<string | null>(null);
+export const rankRange = ref<string>("1-10,1000,2500");
 
 createApp(App)
     .use(vuetify)

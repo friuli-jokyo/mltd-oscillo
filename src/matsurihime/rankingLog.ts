@@ -23,9 +23,9 @@ export function splitRanges(ranges: string): number[] {
     const result: number[] = [];
     for (const range of ranges_splited) {
         if (range.includes("-")) {
-            const [start, end] = range.split("-").map(Number);
-            if (isNaN(start) || isNaN(end) || start > end) {
-                throw new Error(`Invalid range: ${range}`);
+            let [start, end] = range.split("-").map(Number);
+            if (start > end) {
+                [start, end] = [end, start];
             }
             for (let i = start; i <= end; i++) {
                 result.push(i);
