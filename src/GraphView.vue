@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import Highcharts from "highcharts";
+import Highcharts, { SeriesOptionsType } from "highcharts";
 import { fetchIdolRankingLog, fetchRankingLog, splitRanges } from "@/matsurihime/rankingLog";
 import { event, idolId, rankRange, rankingType } from "./main";
 import { rankingType2Name } from "./matsurihime";
@@ -29,10 +29,11 @@ onMounted(async () => {
         return await fetchIdolRankingLog(event.value.id, idolId.value, splitRanges(rankRange.value));
       }
     })();
-    const series = rankingLogs.map(v => {
+    const series: SeriesOptionsType[] = rankingLogs.map(v => {
       return {
+        type: "line",
         name: `#${v.rank}`,
-        data: v.data.map(d => { return { "x": d.aggregatedAt, "y": d.score } }),
+        data: v.data.map(d => { return { "x": d.aggregatedAt.getTime(), "y": d.score } }),
       }
     });
     Highcharts.chart(chartRef.value, {
