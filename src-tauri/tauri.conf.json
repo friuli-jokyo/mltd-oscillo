@@ -12,12 +12,14 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "mltd-oscillo",
         "width": 800,
         "height": 600
       }
     ],
     "security": {
+      "capabilities": ["default"],
       "csp": null
     }
   },
