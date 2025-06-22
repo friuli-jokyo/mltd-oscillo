@@ -1,3 +1,4 @@
+import Highcharts from "highcharts";
 import { dateFormat } from "highcharts";
 
 export const highchartsOptions: Highcharts.Options = {
@@ -33,3 +34,9 @@ export const highchartsOptions: Highcharts.Options = {
     }
   }
 }
+
+Highcharts.setOptions({
+  time: {
+    timezone: "Asia/Tokyo",
+  },
+})
