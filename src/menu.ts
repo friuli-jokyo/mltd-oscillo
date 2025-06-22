@@ -1,4 +1,4 @@
-import { CheckMenuItem, Menu, Submenu } from "@tauri-apps/api/menu";
+import { Menu, Submenu } from "@tauri-apps/api/menu";
 import { viewRangeStrategy } from "./main";
 
 export async function initMenu() {
