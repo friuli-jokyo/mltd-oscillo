@@ -11,6 +11,7 @@ const chartRef = ref<HTMLElement | null>(null);
 const chart = ref<Highcharts.Chart | null>(null);
 
 const timer = ref<NodeJS.Timeout | null>(null);
+const countDown = ref<number>(0);
 
 const logs: RankingLog[] = [];
 
@@ -153,11 +154,26 @@ onMounted(async () => {
   updateAxisRange();
   if (event.value && new Date() < event.value?.schedule.endAt) {
     console.log("This event is still ongoing, setting up timer for updates");
+    countDown.value = 300;
     timer.value = setInterval(async () => {
-      await updateLogs();
-      updateSeries();
-      updateAxisRange();
-    }, 5 * 60 * 1000);
+      countDown.value -= 1;
+      if (countDown.value <= 0) {
+        countDown.value = 300;
+        await updateLogs();
+        updateSeries();
+        updateAxisRange();
+      }
+      if (chart.value) {
+        chart.value.setSubtitle({
+          text: `更新まで残り${countDown.value}秒`,
+          style: {
+            textAlign: "right",
+            fontSize: "0.6em",
+            color: "#666"
+          }
+        });
+      }
+    }, 1000);
   }
 });
 
