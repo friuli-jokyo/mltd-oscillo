@@ -22,7 +22,7 @@ export const idols = mltdIdols();
 export const event = ref<MltdEvent | null>(null);
 export const rankingType = ref<MltdRankingType | null>("eventPoint");
 export const idol = ref<MltdIdol | null>(null);
-export const rankRange = ref<string>("1-10,1000,2500");
+export const rankRange = ref<string>("1-10,100,2500");
 
 type ViewRangeStrategy = "wholeEvent" | "onlyAggregated" | "zoomed";
 export const viewRangeStrategy = ref<ViewRangeStrategy>("wholeEvent");

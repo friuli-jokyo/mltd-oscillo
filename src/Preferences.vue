@@ -31,7 +31,7 @@ function sendForm(): void {
         return;
     }
     if (!rankRange.value || !validateRankRange(rankRange.value)) {
-        alert("順位の範囲を正しく入力してください（例: 1-10,1000,2500）");
+        alert("順位の範囲を正しく入力してください（例: 1-10,100,2500）");
         return;
     }
     router.push('/graphview')
