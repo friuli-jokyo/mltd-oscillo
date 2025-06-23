@@ -85,21 +85,18 @@ function updateAxisRange() {
         event.value.schedule.beginAt.getTime(),
         event.value.schedule.endAt.getTime()
       );
-      chart.value.yAxis[0].setExtremes(0, undefined);
       break;
     case "onlyAggregated":
       chart.value.xAxis[0].setExtremes(
         event.value.schedule.beginAt.getTime(),
         since ? since.getTime() + 1000 * 60 * 60 : event.value.schedule.endAt.getTime()
       );
-      chart.value.yAxis[0].setExtremes(0, undefined);
       break;
     case "zoomed":
       chart.value.xAxis[0].setExtremes(
         since ? since.getTime() - 1000 * 60 * 60 * 26 : event.value.schedule.beginAt.getTime(),
         since ? since.getTime() + 1000 * 60 * 60 : event.value.schedule.endAt.getTime()
       );
-      chart.value.yAxis[0].setExtremes(undefined, undefined);
       break;
   }
   chart.value.redraw();
