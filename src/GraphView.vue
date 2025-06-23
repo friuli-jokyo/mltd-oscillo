@@ -42,8 +42,8 @@ async function updateLogs() {
       const newLog = newLogs.find(n => n.rank === v.rank);
       if (newLog) {
         v.data.push(...newLog.data);
-        const lastDate = v.data[v.data.length - 1].aggregatedAt;
-        if (!since || lastDate > since) {
+        const lastDate = v.data.length ? v.data[v.data.length - 1].aggregatedAt : null;
+        if (!since || (lastDate && lastDate > since)) {
           since = lastDate;
         }
       }
@@ -51,8 +51,8 @@ async function updateLogs() {
   } else {
     logs.push(...newLogs);
     since = newLogs.reduce((latest, log) => {
-      const lastDate = log.data[log.data.length - 1].aggregatedAt;
-      return !latest || lastDate > latest ? lastDate : latest;
+      const lastDate = log.data.length ? log.data[log.data.length - 1].aggregatedAt : null;
+      return !latest || (lastDate && lastDate > latest) ? lastDate : latest;
     }, null as Date | null);
   }
 }
@@ -107,6 +107,9 @@ watch(viewRangeStrategy, () => {
 })
 
 onMounted(async () => {
+  if (window.location.hostname === "tauri.localhost") {
+    document.addEventListener("contextmenu", event => { event.preventDefault(); })
+  }
   if (!chartRef.value) {
     return;
   }
