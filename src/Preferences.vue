@@ -3,9 +3,10 @@ import { mltdEvents, event, rankingType, idols, idol, rankRange } from './main';
 import { fetchBorders, MltdEventBorders } from './matsurihime/borders';
 import { computedAsync } from '@vueuse/core';
 import router from './router';
+import { MltdRankingType, rankingType2Name } from './matsurihime';
 
 const eventBorers = computedAsync<MltdEventBorders>(async () => event.value ? await fetchBorders(event.value.id) : {});
-const rankingTypes = computedAsync<string[]>(async () => eventBorers.value ? Object.keys(eventBorers.value) : []);
+const rankingTypes = computedAsync<MltdRankingType[]>(async () => eventBorers.value ? Object.keys(eventBorers.value) as (keyof MltdEventBorders)[] : []);
 const idolIds = computedAsync<number[]>(async () => eventBorers.value?.idolPoint?.map(border => border.idolId) || []);
 
 function validateRankRange(value: string): boolean {
@@ -62,7 +63,7 @@ function sendForm(): void {
                 <v-col align="left" cols="10">
                     <select name="rankingType" v-model="rankingType">
                         <option v-for="rankingType in rankingTypes" :key="rankingType" :value="rankingType">
-                            {{ rankingType }}
+                            {{ rankingType2Name(rankingType) }}
                         </option>
                     </select>
                 </v-col>
@@ -105,7 +106,8 @@ function sendForm(): void {
     margin: 0 auto;
 }
 
-select, input {
+select,
+input {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 4px;
