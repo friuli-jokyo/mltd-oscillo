@@ -21,14 +21,22 @@ export const highchartsOptions: Highcharts.Options = {
       let s = '<b>' +
         dateFormat('%m/%e %k:%M', this.x) + '</b>';
       if (this.points) {
+        s += '<table style="margin-top: 8px; border-spacing: 0; border-collapse: collapse; width: 100%;">';
         this.points.forEach(point => {
           if (!point.y) { return; }
-          s += `<div style="margin-top: 8px;">` +
-            `<div style="color:${point.color}; margin-right:5px; display:inline-block;">●</div>` +
-            `<div style="display:inline-block; width:80px; text-align:right; margin-right:10px;">${point.series.name}</div>` +
-            `<div style="display:inline-block; text-align:right;"><b>${point.y.toLocaleString()}</b></div>` +
-            `</div>`;
+          s += `<tr>
+            <td style="padding: 2px 8px 2px 0; white-space: nowrap;">
+              <span style="color:${point.color};">●</span>
+            </td>
+            <td style="padding: 2px 8px; text-align: right; white-space: nowrap;">
+              ${point.series.name}
+            </td>
+            <td style="padding: 2px 0 2px 8px; text-align: right; white-space: nowrap;">
+              <b>${point.y.toLocaleString()}</b>
+            </td>
+          </tr>`;
         });
+        s += '</table>';
       }
       return s;
     }
