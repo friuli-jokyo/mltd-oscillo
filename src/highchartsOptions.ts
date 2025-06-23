@@ -6,7 +6,8 @@ export const highchartsOptions: Highcharts.Options = {
     type: "line"
   },
   credits: {
-    enabled: false
+    text: "Powered by matsurihi.me",
+    href: undefined
   },
   title: {
     text: ""
