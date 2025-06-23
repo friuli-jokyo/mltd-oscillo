@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mltdEvents, event, rankingType, idols, idolId, rankRange } from './main';
+import { mltdEvents, event, rankingType, idols, idol, rankRange } from './main';
 import { fetchBorders, MltdEventBorders } from './matsurihime/borders';
 import { computedAsync } from '@vueuse/core';
 import router from './router';
@@ -14,6 +14,9 @@ function validateRankRange(value: string): boolean {
 }
 
 function sendForm(): void {
+    if (rankingType.value !== 'idolPoint' && idol.value) {
+        idol.value = null;
+    }
     if (!event.value) {
         alert("イベントを選択してください");
         return;
@@ -22,7 +25,7 @@ function sendForm(): void {
         alert("ランキング種別を選択してください");
         return;
     }
-    if (rankingType.value === 'idolPoint' && !idolId.value) {
+    if (rankingType.value === 'idolPoint' && !idol.value) {
         alert("アイドルを選択してください");
         return;
     }
@@ -69,9 +72,9 @@ function sendForm(): void {
                     <label for="idolId">アイドル</label>
                 </v-col>
                 <v-col align="left" cols="10">
-                    <select name="idolId" v-model="idolId">
+                    <select name="idolId" v-model="idol">
                         <template v-for="idol in idols">
-                            <option v-if="idol.id in (idolIds || [])" :key="idol.id" :value="idol.id">
+                            <option v-if="idol.id in (idolIds || [])" :key="idol.id" :value="idol">
                                 {{ `${idol.id}: ${idol.fullName}` }}
                             </option>
                         </template>

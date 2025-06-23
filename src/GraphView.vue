@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import Highcharts, { SeriesOptionsType } from "highcharts";
 import { fetchIdolRankingLog, fetchRankingLog, RankingLog, splitRanges } from "@/matsurihime/rankingLog";
-import { event, idolId, idols, rankRange, rankingType, viewRangeStrategy } from "./main";
+import { event, idol, rankRange, rankingType, viewRangeStrategy } from "./main";
 import { rankingType2Name } from "./matsurihime";
 import { highchartsOptions } from "./highchartsOptions";
 
@@ -27,10 +27,10 @@ async function fetchLogs(since?: Date): Promise<RankingLog[]> {
   if (rankingType.value !== "idolPoint") {
     return await fetchRankingLog(event.value.id, rankingType.value, splitRanges(rankRange.value), since);
   } else {
-    if (!idolId.value) {
+    if (!idol.value) {
       throw new Error("Idol ID is not set for idolPoint ranking type");
     }
-    return await fetchIdolRankingLog(event.value.id, idolId.value, splitRanges(rankRange.value), since);
+    return await fetchIdolRankingLog(event.value.id, idol.value.id, splitRanges(rankRange.value), since);
   }
 }
 
@@ -147,7 +147,7 @@ onMounted(async () => {
     }]
   });
   chart.value.setTitle({
-    text: `${event.value?.name}` + (idolId.value ? ` - ${idols.find(idol => idol.id === idolId.value)?.fullName}` : ""),
+    text: `${event.value?.name}` + (idol.value ? ` - ${idol.value.fullName}` : ""),
   });
   updateSeries();
   updateAxisRange();

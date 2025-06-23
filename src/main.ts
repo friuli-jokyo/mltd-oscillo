@@ -9,7 +9,7 @@ import App from "./App.vue";
 import { MltdEvent } from "@/matsurihime/events";
 import router from "./router";
 import { MltdRankingType } from "@/matsurihime";
-import { mltdIdols } from "@/matsurihime/idols";
+import { MltdIdol, mltdIdols } from "@/matsurihime/idols";
 
 const vuetify = createVuetify({
   components,
@@ -21,7 +21,7 @@ export const idols = mltdIdols();
 
 export const event = ref<MltdEvent | null>(null);
 export const rankingType = ref<MltdRankingType | null>("eventPoint");
-export const idolId = ref<number | null>(null);
+export const idol = ref<MltdIdol | null>(null);
 export const rankRange = ref<string>("1-10,1000,2500");
 
 type ViewRangeStrategy = "wholeEvent" | "onlyAggregated" | "zoomed";
