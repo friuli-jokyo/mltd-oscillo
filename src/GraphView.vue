@@ -83,19 +83,19 @@ function updateAxisRange() {
     case "wholeEvent":
       chart.value.xAxis[0].setExtremes(
         event.value.schedule.beginAt.getTime(),
-        event.value.schedule.endAt.getTime()
+        Math.max(since ? since.getTime() : 0, event.value.schedule.endAt.getTime())
       );
       break;
     case "onlyAggregated":
       chart.value.xAxis[0].setExtremes(
         event.value.schedule.beginAt.getTime(),
-        Math.max(since ? since.getTime() : 0, event.value.schedule.endAt.getTime())
+        since ? since.getTime() : event.value.schedule.endAt.getTime()
       );
       break;
     case "zoomed":
       chart.value.xAxis[0].setExtremes(
         since ? since.getTime() - 1000 * 60 * 60 * 26 : event.value.schedule.beginAt.getTime(),
-        Math.max(since ? since.getTime() : 0, event.value.schedule.endAt.getTime())
+        since ? since.getTime() : event.value.schedule.endAt.getTime()
       );
       break;
   }
