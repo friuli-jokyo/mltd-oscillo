@@ -89,13 +89,13 @@ function updateAxisRange() {
     case "onlyAggregated":
       chart.value.xAxis[0].setExtremes(
         event.value.schedule.beginAt.getTime(),
-        since ? since.getTime() + 1000 * 60 * 60 : event.value.schedule.endAt.getTime()
+        Math.max(since ? since.getTime() : 0, event.value.schedule.endAt.getTime())
       );
       break;
     case "zoomed":
       chart.value.xAxis[0].setExtremes(
         since ? since.getTime() - 1000 * 60 * 60 * 26 : event.value.schedule.beginAt.getTime(),
-        since ? since.getTime() + 1000 * 60 * 60 : event.value.schedule.endAt.getTime()
+        Math.max(since ? since.getTime() : 0, event.value.schedule.endAt.getTime())
       );
       break;
   }
@@ -197,6 +197,7 @@ onUnmounted(() => {
 .chart {
   width: 100%;
   height: 100%;
+  padding-right: 10px;
 }
 </style>
 <style>
