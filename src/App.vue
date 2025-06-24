@@ -5,6 +5,9 @@ import { event, mltdEvents } from './main';
 import { fetchMltdEvents } from './matsurihime/events';
 
 onBeforeMount(async () => {
+  if (window.location.hostname === "tauri.localhost") {
+    document.addEventListener("contextmenu", event => { event.preventDefault(); })
+  }
   await initMenu();
   if (mltdEvents.value.length === 0) {
     console.log("Fetching MLTD events...");

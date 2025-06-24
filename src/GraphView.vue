@@ -107,9 +107,6 @@ watch(viewRangeStrategy, () => {
 })
 
 onMounted(async () => {
-  if (window.location.hostname === "tauri.localhost") {
-    document.addEventListener("contextmenu", event => { event.preventDefault(); })
-  }
   if (!chartRef.value) {
     return;
   }
