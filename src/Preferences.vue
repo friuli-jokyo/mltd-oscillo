@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mltdEvents, event, rankingType, idols, idol, rankRange } from './main';
+import { mltdEvents, event, rankingType, idols, idol, rankRange, aggregateAll } from './main';
 import { fetchBorders, MltdEventBorders } from './matsurihime/borders';
 import { computedAsync } from '@vueuse/core';
 import router from './router';
@@ -82,6 +82,14 @@ function sendForm(): void {
                     </select>
                 </v-col>
             </v-row>
+            <v-row v-if="rankingType == 'idolPoint'">
+                <v-col align="right" cols="2">
+                    <label for="rank">データを全件表示</label>
+                </v-col>
+                <v-col align="left" cols="10">
+                    <input type="checkbox" name="rank" v-model="aggregateAll">
+                </v-col>
+            </v-row>
             <v-row>
                 <v-col align="right" cols="2">
                     <label for="rank">順位</label>
@@ -107,7 +115,7 @@ function sendForm(): void {
 }
 
 select,
-input {
+input[type=text] {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 4px;

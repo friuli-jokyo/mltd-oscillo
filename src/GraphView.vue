@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import Highcharts, { SeriesOptionsType } from "highcharts";
 import { fetchIdolRankingLog, fetchRankingLog, RankingLog, splitRanges } from "@/matsurihime/rankingLog";
-import { event, idol, rankRange, rankingType, viewRangeStrategy } from "./main";
+import { aggregateAll, event, idol, rankRange, rankingType, viewRangeStrategy } from "./main";
 import { rankingType2Name } from "./matsurihime";
 import { highchartsOptions } from "./highchartsOptions";
 
@@ -31,7 +31,7 @@ async function fetchLogs(since?: Date): Promise<RankingLog[]> {
     if (!idol.value) {
       throw new Error("Idol ID is not set for idolPoint ranking type");
     }
-    return await fetchIdolRankingLog(event.value.id, idol.value.id, splitRanges(rankRange.value), since);
+    return await fetchIdolRankingLog(event.value.id, idol.value.id, splitRanges(rankRange.value), aggregateAll.value, since);
   }
 }
 
