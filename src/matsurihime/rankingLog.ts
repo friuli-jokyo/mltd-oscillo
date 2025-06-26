@@ -67,12 +67,12 @@ export async function fetchRankingLog(eventId: number, eventType: MltdRankingTyp
     return result;
 }
 
-export async function fetchIdolRankingLog(eventId: number, idolId: number, ranks: number[], since?: Date): Promise<RankingLog[]> {
+export async function fetchIdolRankingLog(eventId: number, idolId: number, ranks: number[], all: boolean, since?: Date): Promise<RankingLog[]> {
     const ranks_splited = splitRanks(ranks);
     let result: RankingLog[] = [];
     
     const responses = await Promise.all(ranks_splited.map((rankChunk) =>
-        fetch(MATSURIHIME_API + `events/${eventId}/rankings/idolPoint/${idolId}/logs/${rankChunk.join(",")}?prettyPrint=false` + (since ? `&since=${since.toISOString()}` : ""))
+        fetch(MATSURIHIME_API + `events/${eventId}/rankings/idolPoint/${idolId}/logs/${rankChunk.join(",")}?prettyPrint=false&all=${all}` + (since ? `&since=${since.toISOString()}` : ""))
     ));
     
     const dataPromises = responses.map(async (response) => {
