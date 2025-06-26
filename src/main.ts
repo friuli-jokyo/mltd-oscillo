@@ -21,6 +21,7 @@ export const idols = mltdIdols();
 
 export const event = ref<MltdEvent | null>(null);
 export const rankingType = ref<MltdRankingType | null>("eventPoint");
+export const aggregateAll = ref<boolean>(true);
 export const idol = ref<MltdIdol | null>(null);
 export const rankRange = ref<string>("1-10,100,2500");
 
