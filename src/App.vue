@@ -3,12 +3,15 @@ import { onBeforeMount } from 'vue';
 import { initMenu } from './menu';
 import { event, mltdEvents } from './main';
 import { fetchMltdEvents } from './matsurihime/events';
+import { getCurrentWindow } from '@tauri-apps/api/window';
+import { getVersion } from '@tauri-apps/api/app';
 
 onBeforeMount(async () => {
   if (window.location.hostname === "tauri.localhost") {
     document.addEventListener("contextmenu", event => { event.preventDefault(); })
   }
   await initMenu();
+  await getCurrentWindow().setTitle(`mltd-oscillo v${await getVersion()}`);
   if (mltdEvents.value.length === 0) {
     console.log("Fetching MLTD events...");
     mltdEvents.value = await fetchMltdEvents();
