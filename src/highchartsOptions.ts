@@ -22,7 +22,8 @@ Highcharts.setOptions({
     href: undefined
   },
   lang: {
-    resetZoom: "元の範囲に戻す"
+    resetZoom: "元の範囲に戻す",
+    resetZoomTitle: "元の範囲に戻します"
   },
   title: {
     text: ""

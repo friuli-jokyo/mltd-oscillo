@@ -134,10 +134,10 @@ onMounted(async () => {
               zoomed.value = true;
             }
           } else {
-            setTimeout(updateAxisRange, 0);
             zoomed.value = false;
+            updateAxisRange();
           }
-          return true;
+          return false;
         }
       }
     },
