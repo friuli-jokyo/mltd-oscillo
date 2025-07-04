@@ -4,11 +4,12 @@ import Highcharts, { SeriesOptionsType } from "highcharts";
 import { fetchIdolRankingLog, fetchRankingLog, RankingLog, splitRanges } from "@/matsurihime/rankingLog";
 import { aggregateAll, event, idol, rankRange, rankingType, viewRangeStrategy } from "./main";
 import { rankingType2Name } from "./matsurihime";
-import { highchartsOptions } from "./highchartsOptions";
+import "./highchartsOptions";
 
 let since: Date | null = null;
 const chartRef = ref<HTMLElement | null>(null);
 const chart = ref<Highcharts.Chart | null>(null);
+const zoomed = ref<boolean>(false);
 
 const timer = ref<NodeJS.Timeout | null>(null);
 const countDown = ref<number>(0);
@@ -75,8 +76,16 @@ function updateSeries() {
   console.log("Graph updated");
 }
 
-function updateAxisRange() {
-  if (!chart.value || !event.value) {
+function updateAxisRange(minDate?: Date, maxDate?: Date) {
+  if (!chart.value || zoomed.value) {
+    return;
+  }
+  if (minDate && maxDate) {
+    chart.value.xAxis[0].setExtremes(minDate.getTime(), maxDate.getTime());
+    return;
+  }
+  if (!event.value) {
+    console.error("Event is not set, cannot update axis range");
     return;
   }
   switch (viewRangeStrategy.value) {
@@ -112,7 +121,25 @@ onMounted(async () => {
   }
   await updateLogs();
   chart.value = Highcharts.chart(chartRef.value, {
-    ...highchartsOptions,
+    chart: {
+      events: {
+        selection: (e) => {
+          if (e.xAxis) {
+            const min = e.xAxis[0].min;
+            const max = e.xAxis[0].max;
+            if (min && max) {
+              updateAxisRange(new Date(min), new Date(max));
+              chart.value?.showResetZoom();
+              zoomed.value = true;
+            }
+          } else {
+            setTimeout(updateAxisRange, 0);
+            zoomed.value = false;
+          }
+          return true;
+        }
+      }
+    },
     xAxis: [{
       type: "datetime",
       title: {
