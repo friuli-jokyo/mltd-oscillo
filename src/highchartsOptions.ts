@@ -1,13 +1,28 @@
 import Highcharts from "highcharts";
 import { dateFormat } from "highcharts";
+import "highcharts/modules/accessibility";
 
-export const highchartsOptions: Highcharts.Options = {
+Highcharts.setOptions({
   chart: {
-    type: "line"
+    type: "line",
+    zooming: {
+      type: "x",
+      resetButton: {
+        position: {
+          align: "left",
+          verticalAlign: "top",
+          x: 10,
+          y: 0
+        }
+      }
+    }
   },
   credits: {
     text: "Powered by matsurihi.me",
     href: undefined
+  },
+  lang: {
+    resetZoom: "元の範囲に戻す"
   },
   title: {
     text: ""
@@ -42,10 +57,4 @@ export const highchartsOptions: Highcharts.Options = {
       return s;
     }
   }
-}
-
-Highcharts.setOptions({
-  time: {
-    timezone: "Asia/Tokyo",
-  },
 })
