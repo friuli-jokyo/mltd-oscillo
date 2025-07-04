@@ -1,5 +1,6 @@
 import Highcharts from "highcharts";
 import { dateFormat } from "highcharts";
+import "highcharts/modules/accessibility";
 
 export const highchartsOptions: Highcharts.Options = {
   chart: {
