@@ -82,6 +82,7 @@ function updateAxisRange(minDate?: Date, maxDate?: Date) {
   }
   if (minDate && maxDate) {
     chart.value.xAxis[0].setExtremes(minDate.getTime(), maxDate.getTime());
+    chart.value.redraw();
     return;
   }
   if (!event.value) {
