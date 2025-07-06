@@ -4,10 +4,11 @@ import { fetchBorders, MltdEventBorders } from './matsurihime/borders';
 import { computedAsync } from '@vueuse/core';
 import router from './router';
 import { MltdRankingType, rankingType2Name } from './matsurihime';
+import { computed } from 'vue';
 
 const eventBorers = computedAsync<MltdEventBorders>(async () => event.value ? await fetchBorders(event.value.id) : {});
-const rankingTypes = computedAsync<MltdRankingType[]>(async () => eventBorers.value ? Object.keys(eventBorers.value) as (keyof MltdEventBorders)[] : []);
-const idolIds = computedAsync<number[]>(async () => eventBorers.value?.idolPoint?.map(border => border.idolId) || []);
+const rankingTypes = computed<MltdRankingType[]>(() => eventBorers.value ? Object.keys(eventBorers.value) as (keyof MltdEventBorders)[] : []);
+const rankingIdolIds = computed<number[]>(() => eventBorers.value?.idolPoint?.map(border => border.idolId) || []);
 
 function validateRankRange(value: string): boolean {
     const regex = /^\d+(-\d+)?(,\d+(-\d+)?)*$/;
@@ -75,7 +76,7 @@ function sendForm(): void {
                 <v-col align="left" cols="10">
                     <select name="idolId" v-model="idol">
                         <template v-for="idol in idols">
-                            <option v-if="idol.id in (idolIds || [])" :key="idol.id" :value="idol">
+                            <option v-if="(rankingIdolIds || []).includes(idol.id)" :key="idol.id" :value="idol">
                                 {{ `${idol.id}: ${idol.fullName}` }}
                             </option>
                         </template>
