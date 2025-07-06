@@ -77,12 +77,15 @@ function updateSeries() {
 }
 
 function updateAxisRange(minDate?: Date, maxDate?: Date) {
-  if (!chart.value || zoomed.value) {
+  if (!chart.value) {
     return;
   }
   if (minDate && maxDate) {
     chart.value.xAxis[0].setExtremes(minDate.getTime(), maxDate.getTime());
     chart.value.redraw();
+    return;
+  }
+  if (zoomed.value) {
     return;
   }
   if (!event.value) {
