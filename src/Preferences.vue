@@ -50,7 +50,7 @@ function sendForm(): void {
                 <v-col align="left" cols="10">
                     <select name="eventId" v-model="event">
                         <template v-for="event in mltdEvents">
-                            <option v-if="event.item.name" :key="event.id" :value="event">
+                            <option v-if="event.schedule.boostBeginAt" :key="event.id" :value="event">
                                 {{ event.name }}
                             </option>
                         </template>

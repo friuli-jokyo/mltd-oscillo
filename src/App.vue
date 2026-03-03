@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { initMenu } from './menu';
 import { event, mltdEvents } from './main';
 import { fetchMltdEvents } from './matsurihime/events';
-import { getCurrentWindow } from '@tauri-apps/api/window';
-import { getVersion } from '@tauri-apps/api/app';
+
+const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
 
 onBeforeMount(async () => {
-  if (window.location.hostname === "tauri.localhost") {
-    document.addEventListener("contextmenu", event => { event.preventDefault(); })
+  if (isTauri) {
+    document.addEventListener("contextmenu", event => { event.preventDefault(); });
+    const { initMenu } = await import('./menu');
+    await initMenu();
+    const { getCurrentWindow } = await import('@tauri-apps/api/window');
+    const { getVersion } = await import('@tauri-apps/api/app');
+    await getCurrentWindow().setTitle(`mltd-oscillo v${await getVersion()}`);
   }
-  await initMenu();
-  await getCurrentWindow().setTitle(`mltd-oscillo v${await getVersion()}`);
   if (mltdEvents.value.length === 0) {
     console.log("Fetching MLTD events...");
     mltdEvents.value = await fetchMltdEvents();
@@ -19,7 +21,7 @@ onBeforeMount(async () => {
   }
   if (mltdEvents.value.length !== 0) {
     // イベントアイテム名が設定された最新のイベントを取得
-    event.value = mltdEvents.value.find(event => event.item.name !== null) || null;
+    event.value = mltdEvents.value.find(event => event.schedule.boostBeginAt !== null) || null;
   }
 })
 </script>
