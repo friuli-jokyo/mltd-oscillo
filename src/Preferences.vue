@@ -35,7 +35,16 @@ function sendForm(): void {
         alert("順位の範囲を正しく入力してください（例: 1-10,100,2500）");
         return;
     }
-    router.push('/graphview')
+    const query: Record<string, string> = {
+        eventId: String(event.value.id),
+        rankingType: rankingType.value,
+        rankRange: rankRange.value,
+    };
+    if (rankingType.value === 'idolPoint' && idol.value) {
+        query.idolId = String(idol.value.id);
+        query.aggregateAll = String(aggregateAll.value);
+    }
+    router.push({ path: '/graphview', query });
 }
 
 </script>

@@ -2,10 +2,13 @@
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import Highcharts, { SeriesOptionsType } from "highcharts";
 import { fetchIdolRankingLog, fetchRankingLog, RankingLog, splitRanges } from "@/matsurihime/rankingLog";
-import { aggregateAll, event, idol, rankRange, rankingType, viewRangeStrategy } from "./main";
-import { rankingType2Name } from "./matsurihime";
+import { aggregateAll, event, idol, idols, mltdEvents, rankRange, rankingType, viewRangeStrategy } from "./main";
+import { MltdRankingType, rankingType2Name } from "./matsurihime";
 import "./highchartsOptions";
 import router from "./router";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 
 let since: Date | null = null;
 const chartRef = ref<HTMLElement | null>(null);
@@ -121,6 +124,25 @@ watch(viewRangeStrategy, () => {
 })
 
 onMounted(async () => {
+  const query = route.query;
+  if (query.eventId) {
+    if (mltdEvents.value.length === 0) {
+      await new Promise<void>(resolve => {
+        const stop = watch(mltdEvents, (val) => {
+          if (val.length > 0) {
+            stop();
+            resolve();
+          }
+        });
+      });
+    }
+    const foundEvent = mltdEvents.value.find(e => e.id === Number(query.eventId));
+    if (foundEvent) event.value = foundEvent;
+    if (query.rankingType) rankingType.value = query.rankingType as MltdRankingType;
+    if (query.idolId) idol.value = idols.find(i => i.id === Number(query.idolId)) ?? null;
+    if (query.aggregateAll !== undefined) aggregateAll.value = query.aggregateAll === "true";
+    if (query.rankRange) rankRange.value = query.rankRange as string;
+  }
   if (!chartRef.value) {
     return;
   }
@@ -222,7 +244,7 @@ onUnmounted(() => {
 <template>
   <main class="container">
     <div class="toolbar">
-      <v-btn size="small" variant="outlined" @click="router.push('/')">戻る</v-btn>
+      <v-btn size="small" variant="outlined" @click="router.push('/')">設定</v-btn>
       <select v-model="viewRangeStrategy" class="range-select">
         <option value="wholeEvent">イベント期間全表示</option>
         <option value="onlyAggregated">集計済み期間表示</option>
