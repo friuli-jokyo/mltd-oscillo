@@ -19,7 +19,7 @@ onBeforeMount(async () => {
   }
   if (mltdEvents.value.length !== 0) {
     // イベントアイテム名が設定された最新のイベントを取得
-    event.value = mltdEvents.value.find(event => event.item.name !== null) || null;
+    event.value = mltdEvents.value.find(event => event.schedule.boostBeginAt !== null) || null;
   }
 })
 </script>
