@@ -10,6 +10,10 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig(async () => ({
   plugins: [vue(), vuetify({ autoImport: true })],
 
+  // Use /mltd-oscillo/ as base when building for GitHub Pages
+  // @ts-expect-error process is a nodejs global
+  base: process.env.GITHUB_ACTIONS ? '/mltd-oscillo/' : '/',
+
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent vite from obscuring rust errors
