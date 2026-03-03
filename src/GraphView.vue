@@ -244,7 +244,7 @@ onUnmounted(() => {
 <template>
   <main class="container">
     <div class="toolbar">
-      <v-btn size="small" variant="outlined" @click="router.push('/')">戻る</v-btn>
+      <v-btn size="small" variant="outlined" @click="router.push('/')">設定</v-btn>
       <select v-model="viewRangeStrategy" class="range-select">
         <option value="wholeEvent">イベント期間全表示</option>
         <option value="onlyAggregated">集計済み期間表示</option>
