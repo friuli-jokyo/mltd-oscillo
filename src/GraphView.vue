@@ -5,6 +5,7 @@ import { fetchIdolRankingLog, fetchRankingLog, RankingLog, splitRanges } from "@
 import { aggregateAll, event, idol, rankRange, rankingType, viewRangeStrategy } from "./main";
 import { rankingType2Name } from "./matsurihime";
 import "./highchartsOptions";
+import router from "./router";
 
 let since: Date | null = null;
 const chartRef = ref<HTMLElement | null>(null);
@@ -220,6 +221,14 @@ onUnmounted(() => {
 
 <template>
   <main class="container">
+    <div class="toolbar">
+      <v-btn size="small" variant="outlined" @click="router.push('/')">設定</v-btn>
+      <select v-model="viewRangeStrategy" class="range-select">
+        <option value="wholeEvent">イベント期間全表示</option>
+        <option value="onlyAggregated">集計済み期間表示</option>
+        <option value="zoomed">ズーム表示</option>
+      </select>
+    </div>
     <div class="chart" ref="chartRef"></div>
   </main>
 </template>
@@ -227,8 +236,19 @@ onUnmounted(() => {
 <style scoped>
 .chart {
   width: 100%;
-  height: 100%;
+  flex: 1;
   padding-right: 10px;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+}
+.range-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 4px;
 }
 </style>
 <style>
